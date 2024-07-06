@@ -1,0 +1,24 @@
+name: Safety Check
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to the branch you want to trigger the workflow on
+
+jobs:
+  safety:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run Safety Check
+        run: |
+          docker run --rm -v $(pwd):/src hysnsec/safety check -r requirements.txt --json > safety-report.json
+
+      - name: Upload Safety Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: safety-report
+          path: safety-report.json
