@@ -1,0 +1,31 @@
+name: Retire.js Analysis
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to your default branch
+
+jobs:
+  retire-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Adjust as needed
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run retire.js analysis
+        run: npx retire --outputformat json > retire-results.json
+
+      - name: Upload results
+        uses: actions/upload-artifact@v2
+        with:
+          name: retire-results
+          path: retire-results.json
